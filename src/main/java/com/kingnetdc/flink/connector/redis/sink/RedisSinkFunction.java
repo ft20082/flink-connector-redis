@@ -76,7 +76,7 @@ public class RedisSinkFunction extends RichSinkFunction<RowData> implements Chec
 	public void invoke(RowData value, Context context) throws Exception {
 		int maxRetry = sinkConfig.getSinkMaxRetry();
 		int sleepTime = 500;
-		String key = RedisSerde.convertRowDataToKeyString(redisTableSchema, redisConfig, value);
+		String key = RedisSerde.convertRowDataToKeyString(redisTableSchema, value);
 		Map<String, String> hash = RedisSerde.convertRowDataToMap(redisTableSchema, value);
 		for (int i = 0; i < maxRetry; i ++) {
 			Jedis jedis = null;

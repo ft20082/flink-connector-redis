@@ -20,8 +20,6 @@ import java.util.Set;
 import static com.kingnetdc.flink.connector.redis.base.Constants.CONNECTOR_TYPE;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.DB;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.HOST;
-import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.KEY_CONCAT_STRING;
-import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.KEY_PRE;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_ASYNC;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_CACHE_MAX_ROWS;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_CACHE_TTL;
@@ -76,8 +74,6 @@ public class RedisDynamicTableFactory implements DynamicTableSourceFactory, Dyna
 		set.add(POOL_SIZE);
 		set.add(TIMEOUT);
 		set.add(TEST_ON_BORROW);
-		set.add(KEY_CONCAT_STRING);
-		set.add(KEY_PRE);
 		set.add(SINK_PARALLELISM);
 		set.add(SINK_KEY_TTL);
 		set.add(SINK_MAX_RETRY);

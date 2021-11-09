@@ -36,18 +36,10 @@ public class RedisSerde {
 	 * @param rowData row data
 	 * @return
 	 */
-	public static String convertRowDataToKeyString(RedisTableSchema redisTableSchema,
-												   RedisConfig redisConfig, RowData rowData) {
-		List<ColumnInfo> keyColumn = redisTableSchema.getKeyColumns();
-		StringBuilder sb = new StringBuilder();
-		String keyPre = redisConfig.getKeyPre();
-		String keyConcatString = redisConfig.getKeyConcatString();
-		sb.append(keyPre);
-		for (ColumnInfo columnInfo : keyColumn) {
-			sb.append(keyConcatString).append(createFieldEncoder(columnInfo.getFieldType().getLogicalType())
-					.encode(rowData, columnInfo.getKeyIndex()));
-		}
-		return sb.toString();
+	public static String convertRowDataToKeyString(RedisTableSchema redisTableSchema, RowData rowData) {
+		ColumnInfo keyColumn = redisTableSchema.getKeyColumn();
+		return createFieldEncoder(keyColumn.getFieldType().getLogicalType())
+				.encode(rowData, keyColumn.getKeyIndex());
 	}
 
 	/**

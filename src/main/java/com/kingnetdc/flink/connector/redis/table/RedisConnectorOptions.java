@@ -26,12 +26,6 @@ public class RedisConnectorOptions {
 	public static final ConfigOption<Boolean> TEST_ON_BORROW = ConfigOptions.key("test-on-borrow")
 			.booleanType().defaultValue(false).withDescription("redis test on borrow, default is false");
 
-	public static final ConfigOption<String> KEY_CONCAT_STRING = ConfigOptions.key("key-concat-string")
-			.stringType().defaultValue(":").withDescription("redis key concat string, default is :");
-
-	public static final ConfigOption<String> KEY_PRE = ConfigOptions.key("key-pre")
-			.stringType().defaultValue("").withDescription("redis key pre");
-
 	public static final ConfigOption<Integer> SINK_PARALLELISM = ConfigOptions.key("sink.parallelism")
 			.intType().noDefaultValue().withDescription("sink parallelism, default use job parallelism");
 

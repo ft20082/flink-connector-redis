@@ -31,7 +31,8 @@ maven dependency
 CREATE TABLE redis_table (
     `key` STRING,
     `map_key_sid` INT,
-    `map_key_install_date` STRING
+    `map_key_install_date` STRING,
+    PRIMARY KEY (`key`) NOT ENFORCED 
 ) WITH (
     'connector' = 'redis',
     'host' = '127.0.0.1'
@@ -53,8 +54,6 @@ SELECT `key`, `map_key_sid`, `map_key_install_date` FROM T
 | pool-size | optional | 10 | Integer | 连接池大小 |
 | timeout | optional | 3000  | Integer | 连接超时时间，单位 ms，默认 1s |
 | test-on-borrow | optional | false | Boolean | 测试连接是否有效 |
-| key-concat-string | optional | `:` | String | redis key 连接字符串，默认值`:` |
-| key-pre | optional | (none) | String | redis key 前缀，默认值空字符串 |
 | sink.parallelism | optional | (none) | Integer | 默认并行度 |
 | sink.key-ttl | optional | 0 | Integer | 设置的 key 的超时时间 |
 | sink.max-retry | optional | 3 | Integer | 设置写入的重试次数 |

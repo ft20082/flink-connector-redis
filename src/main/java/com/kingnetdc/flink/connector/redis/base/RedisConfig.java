@@ -21,12 +21,8 @@ public class RedisConfig implements Serializable {
 
 	private boolean testOnBorrow;
 
-	private String keyConcatString;
-
-	private String keyPre;
-
 	public RedisConfig(String host, int port, String password, int db, int poolSize, int timeout,
-					   boolean testOnBorrow, String keyConcatString, String keyPre) {
+					   boolean testOnBorrow) {
 		this.host = host;
 		this.port = port;
 		this.password = password;
@@ -34,8 +30,6 @@ public class RedisConfig implements Serializable {
 		this.poolSize = poolSize;
 		this.timeout = timeout;
 		this.testOnBorrow = testOnBorrow;
-		this.keyConcatString = keyConcatString;
-		this.keyPre = keyPre;
 	}
 
 	public String getHost() {
@@ -66,14 +60,6 @@ public class RedisConfig implements Serializable {
 		return testOnBorrow;
 	}
 
-	public String getKeyConcatString() {
-		return keyConcatString;
-	}
-
-	public String getKeyPre() {
-		return keyPre;
-	}
-
 	public static RedisConfig fromConfig(ReadableConfig config) {
 		String host = config.get(RedisConnectorOptions.HOST);
 		int port = config.get(RedisConnectorOptions.PORT);
@@ -82,8 +68,6 @@ public class RedisConfig implements Serializable {
 		int poolSize = config.get(RedisConnectorOptions.POOL_SIZE);
 		int timeout = config.get(RedisConnectorOptions.TIMEOUT);
 		boolean testOnBorrow = config.get(RedisConnectorOptions.TEST_ON_BORROW);
-		String keyConcatString = config.get(RedisConnectorOptions.KEY_CONCAT_STRING);
-		String keyPre = config.get(RedisConnectorOptions.KEY_PRE);
-		return new RedisConfig(host, port, password, db, poolSize, timeout, testOnBorrow, keyConcatString, keyPre);
+		return new RedisConfig(host, port, password, db, poolSize, timeout, testOnBorrow);
 	}
 }
