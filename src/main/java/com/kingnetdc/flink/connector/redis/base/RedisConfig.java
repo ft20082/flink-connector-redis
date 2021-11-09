@@ -7,8 +7,6 @@ import java.io.Serializable;
 
 public class RedisConfig implements Serializable {
 
-
-
 	private String host;
 
 	private int port;

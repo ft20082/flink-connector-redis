@@ -20,6 +20,8 @@ import redis.clients.jedis.JedisPool;
 
 import java.util.Map;
 
+import static com.kingnetdc.flink.connector.redis.base.Constants.REDIS_OPERATE_CODE_OK;
+
 public class RedisSinkFunction extends RichSinkFunction<RowData> implements CheckpointedFunction {
 
 	private static final Logger log = LoggerFactory.getLogger(RedisSinkFunction.class);
@@ -72,21 +74,20 @@ public class RedisSinkFunction extends RichSinkFunction<RowData> implements Chec
 
 	@Override
 	public void invoke(RowData value, Context context) throws Exception {
-		System.out.println("A1 " + value);
 		int maxRetry = sinkConfig.getSinkMaxRetry();
 		int sleepTime = 500;
+		String key = RedisSerde.convertRowDataToKeyString(redisTableSchema, redisConfig, value);
+		Map<String, String> hash = RedisSerde.convertRowDataToMap(redisTableSchema, value);
 		for (int i = 0; i < maxRetry; i ++) {
 			Jedis jedis = null;
 			try {
 				jedis = getJedis();
 				RowKind kind = value.getRowKind();
-				String key = RedisSerde.convertRowDataToKeyString(redisTableSchema, redisConfig, value);
-				System.out.println("A2 " + key);
 				if (kind == RowKind.INSERT || kind == RowKind.UPDATE_AFTER) {
-					Map<String, String> hash = RedisSerde.convertRowDataToMap(redisTableSchema, value);
-					System.out.println("A3 " + hash);
 					String ret = jedis.hmset(key, hash);
-					System.out.println("A4 " + ret);
+					if (!REDIS_OPERATE_CODE_OK.equals(ret)) {
+						continue;
+					}
 					if (sinkConfig.getSinkKeyTtl() > 0) {
 						jedis.expire(key, sinkConfig.getSinkKeyTtl());
 					}
@@ -95,7 +96,7 @@ public class RedisSinkFunction extends RichSinkFunction<RowData> implements Chec
 				}
 				break;
 			} catch (Exception e) {
-				System.out.println("exception: " + e);
+				log.warn("redis operate error", e);
 				Common.sleep(sleepTime * 2);
 				if (i >= maxRetry) {
 					throw new RuntimeException("redis write error", e);

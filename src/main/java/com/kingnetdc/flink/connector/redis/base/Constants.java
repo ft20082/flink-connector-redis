@@ -4,4 +4,6 @@ public class Constants {
 
 	public static final String CONNECTOR_TYPE = "redis";
 
+	public static final String REDIS_OPERATE_CODE_OK = "OK";
+
 }
