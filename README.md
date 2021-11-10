@@ -54,6 +54,7 @@ SELECT `key`, `map_key_sid`, `map_key_install_date` FROM T
 | pool-size | optional | 10 | Integer | 连接池大小 |
 | timeout | optional | 3000  | Integer | 连接超时时间，单位 ms，默认 1s |
 | test-on-borrow | optional | false | Boolean | 测试连接是否有效 |
+| mode | optional | hash | String | redis 操作模式，使用 `hash` 或 `kv` |
 | sink.parallelism | optional | (none) | Integer | 默认并行度 |
 | sink.key-ttl | optional | 0 | Integer | 设置的 key 的超时时间 |
 | sink.max-retry | optional | 3 | Integer | 设置写入的重试次数 |
@@ -62,6 +63,7 @@ SELECT `key`, `map_key_sid`, `map_key_install_date` FROM T
 | lookup.cache.ttl | optional | 0 | Integer | 缓存过期时间 |
 | lookup.max-retries | optional | 3 | Integer | lookup 失败重试次数 |
 
+> mode 对应的存储模式，如果是 `hash` 则按照字段存储，如果是 `kv` 则使用 json 存储
 
 # Data Type Mapping
 | Flink Sql Type | Redis conversion |

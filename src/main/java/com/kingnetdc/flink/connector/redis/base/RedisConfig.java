@@ -2,6 +2,7 @@ package com.kingnetdc.flink.connector.redis.base;
 
 import com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions;
 import org.apache.flink.configuration.ReadableConfig;
+import org.apache.flink.util.Preconditions;
 
 import java.io.Serializable;
 
@@ -21,8 +22,10 @@ public class RedisConfig implements Serializable {
 
 	private boolean testOnBorrow;
 
+	private RedisMode mode;
+
 	public RedisConfig(String host, int port, String password, int db, int poolSize, int timeout,
-					   boolean testOnBorrow) {
+					   boolean testOnBorrow, String mode) {
 		this.host = host;
 		this.port = port;
 		this.password = password;
@@ -30,6 +33,9 @@ public class RedisConfig implements Serializable {
 		this.poolSize = poolSize;
 		this.timeout = timeout;
 		this.testOnBorrow = testOnBorrow;
+		RedisMode redisMode = RedisMode.of(mode);
+		Preconditions.checkNotNull(redisMode, "mode only support `hash` and `kv`");
+		this.mode = redisMode;
 	}
 
 	public String getHost() {
@@ -60,6 +66,10 @@ public class RedisConfig implements Serializable {
 		return testOnBorrow;
 	}
 
+	public RedisMode getMode() {
+		return mode;
+	}
+
 	public static RedisConfig fromConfig(ReadableConfig config) {
 		String host = config.get(RedisConnectorOptions.HOST);
 		int port = config.get(RedisConnectorOptions.PORT);
@@ -68,6 +78,7 @@ public class RedisConfig implements Serializable {
 		int poolSize = config.get(RedisConnectorOptions.POOL_SIZE);
 		int timeout = config.get(RedisConnectorOptions.TIMEOUT);
 		boolean testOnBorrow = config.get(RedisConnectorOptions.TEST_ON_BORROW);
-		return new RedisConfig(host, port, password, db, poolSize, timeout, testOnBorrow);
+		String mode = config.get(RedisConnectorOptions.MODE);
+		return new RedisConfig(host, port, password, db, poolSize, timeout, testOnBorrow, mode);
 	}
 }

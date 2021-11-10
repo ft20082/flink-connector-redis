@@ -26,6 +26,9 @@ public class RedisConnectorOptions {
 	public static final ConfigOption<Boolean> TEST_ON_BORROW = ConfigOptions.key("test-on-borrow")
 			.booleanType().defaultValue(false).withDescription("redis test on borrow, default is false");
 
+	public static final ConfigOption<String> MODE = ConfigOptions.key("mode")
+			.stringType().defaultValue("hash").withDescription("redis mode, default is hash, available is kv");
+
 	public static final ConfigOption<Integer> SINK_PARALLELISM = ConfigOptions.key("sink.parallelism")
 			.intType().noDefaultValue().withDescription("sink parallelism, default use job parallelism");
 

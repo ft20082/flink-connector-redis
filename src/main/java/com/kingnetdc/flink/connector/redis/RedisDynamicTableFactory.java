@@ -24,6 +24,7 @@ import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LO
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_CACHE_MAX_ROWS;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_CACHE_TTL;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_MAX_RETRIES;
+import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.MODE;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.PASSWORD;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.POOL_SIZE;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.PORT;
@@ -74,6 +75,7 @@ public class RedisDynamicTableFactory implements DynamicTableSourceFactory, Dyna
 		set.add(POOL_SIZE);
 		set.add(TIMEOUT);
 		set.add(TEST_ON_BORROW);
+		set.add(MODE);
 		set.add(SINK_PARALLELISM);
 		set.add(SINK_KEY_TTL);
 		set.add(SINK_MAX_RETRY);

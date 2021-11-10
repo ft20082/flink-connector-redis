@@ -1,6 +1,7 @@
 package com.kingnetdc.flink.connector.redis.sink;
 
 import com.kingnetdc.flink.connector.redis.base.RedisConfig;
+import com.kingnetdc.flink.connector.redis.base.RedisMode;
 import com.kingnetdc.flink.connector.redis.base.SinkConfig;
 import com.kingnetdc.flink.connector.redis.schema.RedisTableSchema;
 import com.kingnetdc.flink.connector.redis.util.Common;
@@ -80,16 +81,32 @@ public class RedisSinkFunction extends RichSinkFunction<RowData> implements Chec
 		Map<String, String> hash = RedisSerde.convertRowDataToMap(redisTableSchema, value);
 		for (int i = 0; i < maxRetry; i ++) {
 			Jedis jedis = null;
+			String ret = null;
 			try {
 				jedis = getJedis();
 				RowKind kind = value.getRowKind();
 				if (kind == RowKind.INSERT || kind == RowKind.UPDATE_AFTER) {
-					String ret = jedis.hmset(key, hash);
-					if (!REDIS_OPERATE_CODE_OK.equals(ret)) {
-						continue;
-					}
-					if (sinkConfig.getSinkKeyTtl() > 0) {
-						jedis.expire(key, sinkConfig.getSinkKeyTtl());
+					switch (redisConfig.getMode()) {
+						case HASH:
+							ret = jedis.hmset(key, hash);
+							if (!REDIS_OPERATE_CODE_OK.equals(ret)) {
+								continue;
+							}
+							if (sinkConfig.getSinkKeyTtl() > 0) {
+								jedis.expire(key, sinkConfig.getSinkKeyTtl());
+							}
+							break;
+						case KV:
+							String hashString = Common.mapToString(hash);
+							if (sinkConfig.getSinkKeyTtl() > 0) {
+								ret = jedis.setex(key, sinkConfig.getSinkKeyTtl(), hashString);
+							} else {
+								ret = jedis.set(key, hashString);
+							}
+							if (!REDIS_OPERATE_CODE_OK.equals(ret)) {
+								continue;
+							}
+							break;
 					}
 				} else {
 					jedis.del(key);
