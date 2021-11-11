@@ -17,19 +17,19 @@ public class RedisTableSchema implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<ColumnInfo> columnInfos;
+	private final List<FieldInfo> fieldInfos;
 
-	private ColumnInfo keyColumn;
+	private FieldInfo keyField;
 
 	public RedisTableSchema() {
-		columnInfos = new LinkedList<>();
+		fieldInfos = new LinkedList<>();
 	}
 
 	public void addColumn(String name, DataType type, int index, boolean isKey) {
 		if (!TypeUtil.isSupportedType(type.getLogicalType())) {
 			throw new IllegalArgumentException("Unsupported class type found " + type + ".");
 		}
-		columnInfos.add(new ColumnInfo(name, type, index, isKey));
+		fieldInfos.add(new FieldInfo(name, type, index, isKey));
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class RedisTableSchema implements Serializable {
 				DataType itemType = fromLogicalToDataType(fieldType);
 				boolean isKey = keyColumns.contains(field.getName());
 				if (isKey) {
-					redisTableSchema.setKeyColumn(itemName, itemType, fieldIndex);
+					redisTableSchema.setKeyField(itemName, itemType, fieldIndex);
 				}
 				redisTableSchema.addColumn(itemName, itemType, fieldIndex, isKey);
 				fieldIndex ++;
@@ -66,27 +66,27 @@ public class RedisTableSchema implements Serializable {
 		return redisTableSchema;
 	}
 
-	public List<ColumnInfo> getColumnInfos() {
-		return columnInfos;
+	public List<FieldInfo> getFieldInfos() {
+		return fieldInfos;
 	}
 
-	public void setKeyColumn(String name, DataType type, int index) {
+	public void setKeyField(String name, DataType type, int index) {
 		if (!TypeUtil.isSupportedType(type.getLogicalType())) {
 			throw new IllegalArgumentException("Unsupported class type found " + type + ".");
 		}
-		if (keyColumn != null) {
+		if (keyField != null) {
 			throw new UnsupportedOperationException("key column only support once time");
 		}
-		this.keyColumn = new ColumnInfo(name, type, index, true);
+		this.keyField = new FieldInfo(name, type, index, true);
 	}
 
-	public ColumnInfo getKeyColumn() {
-		return keyColumn;
+	public FieldInfo getKeyField() {
+		return keyField;
 	}
 
-	public List<ColumnInfo> getNonKeyColumns() {
-		LinkedList<ColumnInfo> ret = new LinkedList<>();
-		columnInfos.forEach(item -> {
+	public List<FieldInfo> getNonKeyFields() {
+		LinkedList<FieldInfo> ret = new LinkedList<>();
+		fieldInfos.forEach(item -> {
 			if (!item.isKey()) {
 				ret.add(item);
 			}

@@ -4,33 +4,33 @@ import org.apache.flink.table.types.DataType;
 
 import java.io.Serializable;
 
-public class ColumnInfo implements Serializable {
+public class FieldInfo implements Serializable {
 
-	private final String keyName;
+	private final String name;
 
 	private final DataType fieldType;
 
-	private final int keyIndex;
+	private final int index;
 
 	private final boolean isKey;
 
-	public ColumnInfo(String keyName, DataType fieldType, int keyIndex, boolean isKey) {
-		this.keyName = keyName;
+	public FieldInfo(String name, DataType fieldType, int index, boolean isKey) {
+		this.name = name;
 		this.fieldType = fieldType;
-		this.keyIndex = keyIndex;
+		this.index = index;
 		this.isKey = isKey;
 	}
 
-	public String getKeyName() {
-		return keyName;
+	public String getName() {
+		return name;
 	}
 
 	public DataType getFieldType() {
 		return fieldType;
 	}
 
-	public int getKeyIndex() {
-		return keyIndex;
+	public int getIndex() {
+		return index;
 	}
 
 	public boolean isKey() {

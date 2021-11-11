@@ -3,7 +3,6 @@ package com.kingnetdc.flink.connector.redis.sink;
 import com.kingnetdc.flink.connector.redis.base.RedisConfig;
 import com.kingnetdc.flink.connector.redis.base.SinkConfig;
 import com.kingnetdc.flink.connector.redis.schema.RedisTableSchema;
-import com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.table.connector.ChangelogMode;
 import org.apache.flink.table.connector.sink.DynamicTableSink;

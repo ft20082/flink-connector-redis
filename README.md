@@ -56,9 +56,8 @@ SELECT `key`, `map_key_sid`, `map_key_install_date` FROM T
 | test-on-borrow | optional | false | Boolean | 测试连接是否有效 |
 | mode | optional | hash | String | redis 操作模式，使用 `hash` 或 `kv` |
 | sink.parallelism | optional | (none) | Integer | 默认并行度 |
-| sink.key-ttl | optional | 0 | Integer | 设置的 key 的超时时间 |
+| sink.key-ttl | optional | 0s | Integer | 设置的 key 的超时时间，单位秒 |
 | sink.max-retry | optional | 3 | Integer | 设置写入的重试次数 |
-| lookup.async | optional | false | Boolean | 是否开启异步 Lookup |
 | lookup.cache.max-rows | optional | 10000 | Integer | lookup 缓存大小 |
 | lookup.cache.ttl | optional | 0 | Integer | 缓存过期时间 |
 | lookup.max-retries | optional | 3 | Integer | lookup 失败重试次数 |

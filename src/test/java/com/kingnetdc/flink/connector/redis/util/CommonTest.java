@@ -17,4 +17,12 @@ public class CommonTest {
 		Assert.assertEquals("a=b,c=d,e=f", Common.mapToString(map));
 	}
 
+	@Test
+	public void stringToMap() {
+		String str = "a=b,c=d,e=f";
+		Map<String, String> ret = Common.stringToMap(str);
+		ret.forEach((key, value) -> System.out.println( key + ": " + value));
+		Assert.assertEquals("d", ret.get("c"));
+	}
+
 }

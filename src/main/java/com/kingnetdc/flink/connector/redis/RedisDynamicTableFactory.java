@@ -5,7 +5,6 @@ import com.kingnetdc.flink.connector.redis.sink.RedisDynamicTableSink;
 import com.kingnetdc.flink.connector.redis.source.RedisDynamicTableSource;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ReadableConfig;
-import org.apache.flink.table.api.Schema;
 import org.apache.flink.table.catalog.ResolvedSchema;
 import org.apache.flink.table.connector.sink.DynamicTableSink;
 import org.apache.flink.table.connector.source.DynamicTableSource;
@@ -14,13 +13,11 @@ import org.apache.flink.table.factories.DynamicTableSourceFactory;
 import org.apache.flink.table.factories.FactoryUtil;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import static com.kingnetdc.flink.connector.redis.base.Constants.CONNECTOR_TYPE;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.DB;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.HOST;
-import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_ASYNC;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_CACHE_MAX_ROWS;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_CACHE_TTL;
 import static com.kingnetdc.flink.connector.redis.table.RedisConnectorOptions.LOOKUP_MAX_RETRIES;
@@ -51,7 +48,12 @@ public class RedisDynamicTableFactory implements DynamicTableSourceFactory, Dyna
 
 	@Override
 	public DynamicTableSource createDynamicTableSource(Context context) {
-		return new RedisDynamicTableSource();
+		FactoryUtil.TableFactoryHelper helper = createTableFactoryHelper(this, context);
+		helper.validate();
+		ReadableConfig tableOptions = helper.getOptions();
+		ResolvedSchema resolvedSchema = context.getCatalogTable().getResolvedSchema();
+		RedisTableSchema redisTableSchema = RedisTableSchema.fromResolvedSchema(resolvedSchema);
+		return new RedisDynamicTableSource(tableOptions, redisTableSchema);
 	}
 
 	@Override
@@ -79,7 +81,6 @@ public class RedisDynamicTableFactory implements DynamicTableSourceFactory, Dyna
 		set.add(SINK_PARALLELISM);
 		set.add(SINK_KEY_TTL);
 		set.add(SINK_MAX_RETRY);
-		set.add(LOOKUP_ASYNC);
 		set.add(LOOKUP_CACHE_MAX_ROWS);
 		set.add(LOOKUP_CACHE_TTL);
 		set.add(LOOKUP_MAX_RETRIES);

@@ -81,7 +81,7 @@ public class RedisSinkFunction extends RichSinkFunction<RowData> implements Chec
 		Map<String, String> hash = RedisSerde.convertRowDataToMap(redisTableSchema, value);
 		for (int i = 0; i < maxRetry; i ++) {
 			Jedis jedis = null;
-			String ret = null;
+			String ret;
 			try {
 				jedis = getJedis();
 				RowKind kind = value.getRowKind();
@@ -119,7 +119,7 @@ public class RedisSinkFunction extends RichSinkFunction<RowData> implements Chec
 					throw new RuntimeException("redis write error", e);
 				}
 			} finally {
-				closeJedis(jedis);
+				Common.closeJedis(jedis);
 			}
 		}
 	}
@@ -134,16 +134,6 @@ public class RedisSinkFunction extends RichSinkFunction<RowData> implements Chec
 				log.warn("close jedis pool error", e);
 			}
 			jedisPool = null;
-		}
-	}
-
-	public void closeJedis(Jedis jedis) {
-		try {
-			if (jedis != null) {
-				jedis.close();
-			}
-		} catch (Exception e) {
-			log.info("close jedis error", e);
 		}
 	}
 }

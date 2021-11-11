@@ -2,8 +2,12 @@ package com.kingnetdc.flink.connector.redis.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import redis.clients.jedis.Jedis;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Common {
 
@@ -31,4 +35,22 @@ public class Common {
 		return sb.toString();
 	}
 
+	public static Map<String, String> stringToMap(String string) {
+		Map<String, String> ret = new HashMap<>();
+		if (string != null && string.length() > 0) {
+			ret = Arrays.stream(string.split(",")).filter(item -> item.indexOf("=") > 0)
+					.map(item -> item.split("=")).collect(Collectors.toMap(item -> item[0], item -> item[1]));
+		}
+		return ret;
+	}
+
+	public static void closeJedis(Jedis jedis) {
+		try {
+			if (jedis != null) {
+				jedis.close();
+			}
+		} catch (Exception e) {
+			log.info("close jedis error", e);
+		}
+	}
 }

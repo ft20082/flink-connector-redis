@@ -38,9 +38,6 @@ public class RedisConnectorOptions {
 	public static final ConfigOption<Integer> SINK_MAX_RETRY = ConfigOptions.key("sink.max-retry")
 			.intType().defaultValue(3).withDescription("sink max retry, default is 3");
 
-	public static final ConfigOption<Boolean> LOOKUP_ASYNC = ConfigOptions.key("lookup.async")
-			.booleanType().defaultValue(false).withDescription("whether to set async lookup");
-
 	public static final ConfigOption<Integer> LOOKUP_CACHE_MAX_ROWS = ConfigOptions.key("lookup.cache.max-rows")
 			.intType().defaultValue(10000).withDescription("lookup cache size");
 

@@ -2,11 +2,12 @@ package com.kingnetdc.flink.connector.redis.schema;
 
 import com.kingnetdc.flink.connector.redis.base.FieldDecoder;
 import com.kingnetdc.flink.connector.redis.base.FieldEncoder;
-import com.kingnetdc.flink.connector.redis.base.RedisConfig;
 import org.apache.flink.table.data.DecimalData;
+import org.apache.flink.table.data.GenericRowData;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.table.data.StringData;
 import org.apache.flink.table.data.TimestampData;
+import org.apache.flink.table.types.DataType;
 import org.apache.flink.table.types.logical.DecimalType;
 import org.apache.flink.table.types.logical.LogicalType;
 
@@ -28,7 +29,23 @@ public class RedisSerde {
 	private static final int MIN_TIME_PRECISION = 0;
 	private static final int MAX_TIME_PRECISION = 3;
 
-	private static final String REDIS_KEY_SPLIT = ":::";
+	/**
+	 * convert map to row data
+	 * @param redisTableSchema redis table schema
+	 * @param map source map
+	 * @return
+	 */
+	public static RowData convertMapToRowData(RedisTableSchema redisTableSchema, Map<String, String> map) {
+		GenericRowData ret = new GenericRowData(redisTableSchema.getFieldInfos().size());
+		redisTableSchema.getFieldInfos().forEach(item -> {
+			int index = item.getIndex();
+			String name = item.getName();
+			DataType type = item.getFieldType();
+			ret.setField(index,
+					createFieldDecoder(type.getLogicalType()).decode(map.getOrDefault(name, null)));
+		});
+		return ret;
+	}
 
 	/**
 	 * use | split redis key
@@ -37,9 +54,9 @@ public class RedisSerde {
 	 * @return
 	 */
 	public static String convertRowDataToKeyString(RedisTableSchema redisTableSchema, RowData rowData) {
-		ColumnInfo keyColumn = redisTableSchema.getKeyColumn();
+		FieldInfo keyColumn = redisTableSchema.getKeyField();
 		return createFieldEncoder(keyColumn.getFieldType().getLogicalType())
-				.encode(rowData, keyColumn.getKeyIndex());
+				.encode(rowData, keyColumn.getIndex());
 	}
 
 	/**
@@ -49,11 +66,11 @@ public class RedisSerde {
 	 */
 	public static Map<String, String> convertRowDataToMap(RedisTableSchema redisTableSchema, RowData rowData) {
 		Map<String, String> ret = new HashMap<>(rowData.getArity());
-		List<ColumnInfo> nonKeyColumn = redisTableSchema.getNonKeyColumns();
-		for (ColumnInfo columnInfo : nonKeyColumn) {
-			String key = columnInfo.getKeyName();
+		List<FieldInfo> nonKeyColumn = redisTableSchema.getNonKeyFields();
+		for (FieldInfo columnInfo : nonKeyColumn) {
+			String key = columnInfo.getName();
 			String value = createFieldEncoder(columnInfo.getFieldType().getLogicalType())
-					.encode(rowData, columnInfo.getKeyIndex());
+					.encode(rowData, columnInfo.getIndex());
 			ret.put(key, value);
 		}
 		return ret;
