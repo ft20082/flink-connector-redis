@@ -6,6 +6,7 @@ import com.kingnetdc.flink.connector.redis.schema.RedisTableSchema;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.table.connector.ChangelogMode;
 import org.apache.flink.table.connector.source.DynamicTableSource;
+import org.apache.flink.table.connector.source.InputFormatProvider;
 import org.apache.flink.table.connector.source.LookupTableSource;
 import org.apache.flink.table.connector.source.ScanTableSource;
 import org.apache.flink.table.connector.source.TableFunctionProvider;
@@ -13,7 +14,7 @@ import org.apache.flink.table.connector.source.abilities.SupportsProjectionPushD
 
 import static com.kingnetdc.flink.connector.redis.base.Constants.CONNECTOR_TYPE;
 
-public class RedisDynamicTableSource implements ScanTableSource, LookupTableSource, SupportsProjectionPushDown {
+public class RedisDynamicTableSource implements LookupTableSource {
 
 	private final ReadableConfig config;
 
@@ -33,16 +34,6 @@ public class RedisDynamicTableSource implements ScanTableSource, LookupTableSour
 	}
 
 	@Override
-	public ChangelogMode getChangelogMode() {
-		return ChangelogMode.insertOnly();
-	}
-
-	@Override
-	public ScanRuntimeProvider getScanRuntimeProvider(ScanContext runtimeProviderContext) {
-		return null;
-	}
-
-	@Override
 	public DynamicTableSource copy() {
 		return new RedisDynamicTableSource(config, redisTableSchema);
 	}
@@ -52,13 +43,4 @@ public class RedisDynamicTableSource implements ScanTableSource, LookupTableSour
 		return CONNECTOR_TYPE;
 	}
 
-	@Override
-	public boolean supportsNestedProjection() {
-		return false;
-	}
-
-	@Override
-	public void applyProjection(int[][] projectedFields) {
-
-	}
 }

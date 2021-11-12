@@ -33,7 +33,7 @@ public class RedisLookupFunction extends TableFunction<RowData> {
 
 	private final RedisTableSchema redisTableSchema;
 
-	private final GenericRowData rowData;
+	private transient GenericRowData rowData;
 
 	private transient Cache<Object, RowData> cache;
 
@@ -43,7 +43,6 @@ public class RedisLookupFunction extends TableFunction<RowData> {
 		this.redisConfig = redisConfig;
 		this.sourceConfig = sourceConfig;
 		this.redisTableSchema = redisTableSchema;
-		this.rowData = new GenericRowData(1);
 	}
 
 	@Override
@@ -67,6 +66,7 @@ public class RedisLookupFunction extends TableFunction<RowData> {
 			log.error("redis source open error.", e);
 			throw new RuntimeException("redis source open error.", e);
 		}
+		this.rowData = new GenericRowData(1);
 		log.info("end open ...");
 	}
 
