@@ -4,7 +4,7 @@ public enum RedisMode {
 
 	HASH("hash"),
 
-	KV("kv");
+	STRING("string");
 
 	private String type;
 
@@ -14,7 +14,7 @@ public enum RedisMode {
 
 	public static RedisMode of(String type) {
 		for (RedisMode item : RedisMode.values()) {
-			if (item.type.equals(type)) {
+			if (item.type.equalsIgnoreCase(type)) {
 				return item;
 			}
 		}

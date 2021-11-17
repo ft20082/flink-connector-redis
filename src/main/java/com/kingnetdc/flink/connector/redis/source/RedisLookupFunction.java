@@ -91,7 +91,7 @@ public class RedisLookupFunction extends TableFunction<RowData> {
 					case HASH:
 						map = jedis.hgetAll(stringKey);
 						break;
-					case KV:
+					case STRING:
 						String str = jedis.get(stringKey);
 						if (str != null && str.length() > 0) {
 							map = Common.stringToMap(str);

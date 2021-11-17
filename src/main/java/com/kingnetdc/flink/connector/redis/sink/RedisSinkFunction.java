@@ -1,7 +1,6 @@
 package com.kingnetdc.flink.connector.redis.sink;
 
 import com.kingnetdc.flink.connector.redis.base.RedisConfig;
-import com.kingnetdc.flink.connector.redis.base.RedisMode;
 import com.kingnetdc.flink.connector.redis.base.SinkConfig;
 import com.kingnetdc.flink.connector.redis.schema.RedisTableSchema;
 import com.kingnetdc.flink.connector.redis.util.Common;
@@ -96,7 +95,7 @@ public class RedisSinkFunction extends RichSinkFunction<RowData> implements Chec
 								jedis.expire(key, sinkConfig.getSinkKeyTtl());
 							}
 							break;
-						case KV:
+						case STRING:
 							String hashString = Common.mapToString(hash);
 							if (sinkConfig.getSinkKeyTtl() > 0) {
 								ret = jedis.setex(key, sinkConfig.getSinkKeyTtl(), hashString);

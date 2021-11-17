@@ -8,11 +8,11 @@ maven repo
 <repositories>
     <repository>
         <id>kingnetdc-public</id>
-        <url>http://mirrors.kyhub.cn/repository/kingnetdc-maven-releases-group/</url>
+        <url>https://mirrors.kyhub.cn/repository/kingnetdc-maven-releases-group/</url>
     </repository>
     <repository>
         <id>maven-snapshots</id>
-        <url>http://mirrors.kyhub.cn/repository/kingnetdc-maven-snapshots-group/</url>
+        <url>https://mirrors.kyhub.cn/repository/kingnetdc-maven-snapshots-group/</url>
     </repository>
 </repositories>
 ```
@@ -38,9 +38,20 @@ CREATE TABLE redis_table (
     'host' = '127.0.0.1'
 );
 
--- 
+-- insert 
 INSERT INTO  redis_table
-SELECT `key`, `map_key_sid`, `map_key_install_date` FROM T
+SELECT `key`, `map_key_sid`, `map_key_install_date` FROM T;
+
+-- query lookup join
+INSERT INTO console_output
+SELECT
+    s.ouid,
+    dim.map_key_sid,
+    dim.map_key_install_date
+FROM kafka_source as s
+left join redis_table FOR SYSTEM_TIME AS OF s.proctime AS dim
+on s.ouid = dim.key
+where s.ouid is not null
 ```
 
 # connector options
@@ -54,7 +65,7 @@ SELECT `key`, `map_key_sid`, `map_key_install_date` FROM T
 | pool-size | optional | 10 | Integer | 连接池大小 |
 | timeout | optional | 3000  | Integer | 连接超时时间，单位 ms，默认 1s |
 | test-on-borrow | optional | false | Boolean | 测试连接是否有效 |
-| mode | optional | hash | String | redis 操作模式，使用 `hash` 或 `kv` |
+| mode | optional | hash | String | redis 操作模式，使用 `hash` 或 `string` |
 | sink.parallelism | optional | (none) | Integer | 默认并行度 |
 | sink.key-ttl | optional | 0s | Integer | 设置的 key 的超时时间，单位秒 |
 | sink.max-retry | optional | 3 | Integer | 设置写入的重试次数 |
