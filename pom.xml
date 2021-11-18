@@ -4,35 +4,13 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.kingnetdc.flink</groupId>
+	<groupId>org.apache.flink</groupId>
 	<artifactId>flink-connector-redis</artifactId>
 	<version>1.14.0-SNAPSHOT</version>
 
 	<name>flink-connector-redis</name>
 
-	<url>https://gitlab.ops.kingnet.com/aquarium/devilfish/flink-connector-redis</url>
-
-	<repositories>
-		<repository>
-			<id>kingnetdc-public</id>
-			<url>http://mirrors.kyhub.cn/repository/kingnetdc-maven-releases-group/</url>
-		</repository>
-		<repository>
-			<id>maven-snapshots</id>
-			<url>http://mirrors.kyhub.cn/repository/kingnetdc-maven-snapshots-group/</url>
-		</repository>
-	</repositories>
-
-	<distributionManagement>
-		<repository>
-			<id>maven-releases</id>
-			<url>http://mirrors.kyhub.cn/repository/kingnetdc-maven-releases-hosted/</url>
-		</repository>
-		<snapshotRepository>
-			<id>maven-snapshots</id>
-			<url>http://mirrors.kyhub.cn/repository/kingnetdc-maven-snapshots-hosted/</url>
-		</snapshotRepository>
-	</distributionManagement>
+	<url>https://github.com/ft20082/flink-connector-redis</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
