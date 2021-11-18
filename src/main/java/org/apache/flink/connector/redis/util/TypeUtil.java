@@ -12,8 +12,6 @@ public class TypeUtil {
 	private static final int MIN_TIMESTAMP_PRECISION = 0;
 	private static final int MAX_TIMESTAMP_PRECISION = 3;
 
-
-
 	public static boolean isSupportedType(LogicalType fieldType) {
 		switch (fieldType.getTypeRoot()) {
 			case CHAR:

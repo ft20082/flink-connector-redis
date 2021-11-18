@@ -27,7 +27,7 @@ public class RedisConnectorOptions {
 			.booleanType().defaultValue(false).withDescription("redis test on borrow, default is false");
 
 	public static final ConfigOption<String> MODE = ConfigOptions.key("mode")
-			.stringType().defaultValue("hash").withDescription("redis mode, default is hash, available is kv");
+			.stringType().defaultValue("hash").withDescription("redis mode, default is hash, another string");
 
 	public static final ConfigOption<Integer> SINK_PARALLELISM = ConfigOptions.key("sink.parallelism")
 			.intType().noDefaultValue().withDescription("sink parallelism, default use job parallelism");

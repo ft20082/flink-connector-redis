@@ -34,7 +34,7 @@ public class RedisConfig implements Serializable {
 		this.timeout = timeout;
 		this.testOnBorrow = testOnBorrow;
 		RedisMode redisMode = RedisMode.of(mode);
-		Preconditions.checkNotNull(redisMode, "mode only support `hash` and `kv`");
+		Preconditions.checkNotNull(redisMode, "mode only support `hash` and `string`");
 		this.mode = redisMode;
 	}
 

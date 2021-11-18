@@ -2,25 +2,10 @@
 
 flink connector redis for flink sql
 
-# maven dependency
-maven repo
-```xml
-<repositories>
-    <repository>
-        <id>kingnetdc-public</id>
-        <url>https://mirrors.kyhub.cn/repository/kingnetdc-maven-releases-group/</url>
-    </repository>
-    <repository>
-        <id>maven-snapshots</id>
-        <url>https://mirrors.kyhub.cn/repository/kingnetdc-maven-snapshots-group/</url>
-    </repository>
-</repositories>
-```
-
 maven dependency
 ```xml
 <dependency>
-    <groupId>com.kingnetdc.flink</groupId>
+    <groupId>org.apache.flink</groupId>
     <artifactId>flink-connector-redis</artifactId>
     <version>1.14.0-SNAPSHOT</version>
 </dependency>
@@ -73,7 +58,7 @@ where s.ouid is not null
 | lookup.cache.ttl | optional | 0 | Integer | 缓存过期时间 |
 | lookup.max-retries | optional | 3 | Integer | lookup 失败重试次数 |
 
-> mode 对应的存储模式，如果是 `hash` 则按照字段存储，如果是 `kv` 则使用 json 存储
+> mode 对应的存储模式，如果是 `hash` 则按照字段存储，如果是 `string` 则使用 k1=v1,k2=v3,... 存储
 
 # Data Type Mapping
 | Flink Sql Type | Redis conversion |
@@ -99,5 +84,6 @@ where s.ouid is not null
 | MULTISET | Not supported |
 | ROW | Not supported |
 
-
+# bug reporter
+issue | ft20082@qq.com
 
